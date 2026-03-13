@@ -1,0 +1,27 @@
+{
+    "_comment": "Traveloka — Browser-based extraction. ID 0 works for name-based search with redirect.",
+    "url": "https://www.traveloka.com",
+    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
+    "steps": [
+        {
+            "action": "goto",
+            "url": "https://www.traveloka.com/en-id/hotel/search?spec={{check_in_dots}}.{{check_out_dots}}.{{rooms}}.{{adults}}.CITY.0.{{city}}.1"
+        },
+        {
+            "action": "wait_for",
+            "selector": "[data-testid='hotel-card']",
+            "timeout": 20000
+        },
+        {
+            "action": "extract_list",
+            "selector": "[data-testid='hotel-card']",
+            "key": "hotels",
+            "fields": {
+                "name": "[data-testid='hotel-name']",
+                "price": "[data-testid='hotel-price']",
+                "rating": "[data-testid='hotel-rating']",
+                "city": "[data-testid='hotel-location']"
+            }
+        }
+    ]
+}

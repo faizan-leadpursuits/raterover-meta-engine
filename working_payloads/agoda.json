@@ -1,0 +1,508 @@
+{
+    "_comment": "Agoda \u2014 Hotel Search via GraphQL. Auto-generated from providers/agoda/scraper.py with exact schema match.",
+    "url": "https://www.agoda.com/graphql/search",
+    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
+    "steps": [
+        {
+            "_comment": "Step 1: Create curl_cffi session with Chrome 124 TLS",
+            "action": "http_session",
+            "impersonate": "chrome124",
+            "headers": {
+                "accept": "*/*",
+                "accept-language": "en-US,en;q=0.9",
+                "content-type": "application/json",
+                "origin": "https://www.agoda.com",
+                "referer": "https://www.agoda.com/search",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+            }
+        },
+        {
+            "_comment": "Step 2: Warm cookies",
+            "action": "http_get",
+            "url": "https://www.agoda.com/search?city={{city_id}}&checkIn={{check_in}}&checkOut={{check_out}}&rooms={{rooms}}&adults={{adults}}&currency={{currency}}",
+            "key": "_warmup_search",
+            "response_type": "text"
+        },
+        {
+            "_comment": "Step 3: POST GraphQL query with exact schema",
+            "action": "http_post",
+            "url": "https://www.agoda.com/graphql/search",
+            "headers": {
+                "ag-language-locale": "en-us",
+                "ag-page-type-id": "103"
+            },
+            "json": {
+                "operationName": "citySearch",
+                "query": "query citySearch($CitySearchRequest: CitySearchRequest!, $ContentSummaryRequest: ContentSummaryRequest!, $PricingSummaryRequest: PricingRequestParameters, $PriceStreamMetaLabRequest: PriceStreamMetaLabRequest) {\n  citySearch(CitySearchRequest: $CitySearchRequest) {\n    searchResult {\n      searchInfo {\n        hasSecretDeal\n        isComplete\n        totalFilteredHotels\n        searchStatus {\n          searchCriteria { checkIn }\n          searchStatus\n        }\n        objectInfo {\n          objectName\n          cityName\n          cityEnglishName\n          countryId\n          countryEnglishName\n          mapLatitude\n          mapLongitude\n          mapZoomLevel\n          cityId\n        }\n      }\n    }\n    properties(ContentSummaryRequest: $ContentSummaryRequest, PricingSummaryRequest: $PricingSummaryRequest, PriceStreamMetaLabRequest: $PriceStreamMetaLabRequest) {\n      propertyId\n      propertyResultType\n      content {\n        informationSummary {\n          hotelCharacter {\n            hotelTag { name symbol }\n            hotelView { name symbol }\n          }\n          propertyLinks { propertyPage }\n          atmospheres { id name }\n          isSustainableTravel\n          localeName\n          defaultName\n          displayName\n          accommodationType\n          awardYear\n          hasHostExperience\n          address {\n            countryCode\n            country { id name }\n            city { id name }\n            area { id name }\n          }\n          propertyType\n          rating\n          agodaGuaranteeProgram\n          remarks {\n            renovationInfo { renovationType year }\n          }\n          spokenLanguages { id }\n          geoInfo { latitude longitude }\n        }\n        propertyEngagement {\n          lastBooking\n          peopleLooking\n          todayBooking\n        }\n        nonHotelAccommodation {\n          masterRooms {\n            noOfBathrooms\n            noOfBedrooms\n            noOfBeds\n            roomSizeSqm\n            highlightedFacilities\n          }\n          hostLevel { id name }\n          supportedLongStay\n        }\n        facilities { id }\n        images {\n          hotelImages {\n            id\n            caption\n            providerId\n            urls { key value }\n          }\n        }\n        reviews {\n          contentReview {\n            isDefault\n            providerId\n            demographics {\n              groups {\n                id\n                grades { id score }\n              }\n            }\n            summaries {\n              recommendationScores { recommendationScore }\n              snippets {\n                countryId countryCode countryName\n                date demographicId demographicName\n                reviewer reviewRating snippet\n              }\n            }\n            cumulative { reviewCount score }\n          }\n          cumulative { reviewCount score }\n        }\n        familyFeatures {\n          hasChildrenFreePolicy\n          isFamilyRoom\n          hasMoreThanOneBedroom\n          isInterConnectingRoom\n          isInfantCottageAvailable\n          hasKidsPool\n          hasKidsClub\n        }\n        personalizedInformation {\n          childrenFreePolicy { fromAge toAge }\n        }\n        localInformation {\n          landmarks {\n            transportation { landmarkName distanceInM }\n            topLandmark { landmarkName distanceInM }\n            beach { landmarkName distanceInM }\n          }\n          hasAirportTransfer\n        }\n        highlight {\n          cityCenter { distanceFromCityCenter }\n          favoriteFeatures {\n            features { id title category }\n          }\n          hasNearbyPublicTransportation\n        }\n        rateCategories {\n          escapeRateCategories { rateCategoryId localizedRateCategoryName }\n        }\n      }\n      pricing {\n        pulseCampaignMetadata {\n          promotionTypeId\n          campaignBadgeText\n          campaignBadgeDescText\n          dealExpiryTime\n          showPulseMerchandise\n        }\n        isAvailable\n        isReady\n        benefits\n        isEasyCancel\n        isInsiderDeal\n        isMultiHotelEligible\n        payment {\n          cancellation { cancellationType freeCancellationDate }\n          payLater { isEligible }\n          payAtHotel { isEligible }\n          noCreditCard { isEligible }\n          taxReceipt { isEligible }\n        }\n        offers {\n          roomOffers {\n            room {\n              availableRooms\n              supplierId\n              pricing {\n                currency\n                price {\n                  perNight {\n                    exclusive { display cashbackPrice displayAfterCashback originalPrice }\n                    inclusive { display cashbackPrice displayAfterCashback originalPrice }\n                  }\n                  perRoomPerNight {\n                    exclusive { display crossedOutPrice cashbackPrice displayAfterCashback rebatePrice originalPrice }\n                    inclusive { display crossedOutPrice cashbackPrice displayAfterCashback rebatePrice originalPrice }\n                  }\n                  perBook {\n                    exclusive { display cashbackPrice displayAfterCashback rebatePrice originalPrice autoAppliedPromoDiscount }\n                    inclusive { display cashbackPrice displayAfterCashback rebatePrice originalPrice autoAppliedPromoDiscount }\n                  }\n                  totalDiscount\n                }\n              }\n              payment {\n                paymentModel\n                cancellation { cancellationType }\n              }\n              discount { deals channelDiscount }\n              benefits { id targetType }\n              channel { id }\n              cashback {\n                cashbackGuid showPostCashbackPrice cashbackVersion\n                percentage earnId dayToEarn expiryDay cashbackType appliedCampaignName\n              }\n              agodaCash { showBadge giftcardGuid dayToEarn expiryDay percentage }\n              capacity { extraBedsAvailable }\n              stayPackageType\n            }\n          }\n        }\n        supplierInfo { id name isAgodaBand }\n        childPolicy { freeChildren }\n      }\n      enrichment {\n        topSellingPoint { tspType value }\n        pricingBadges { badges }\n        uniqueSellingPoint { rank segment uspType uspPropertyType }\n        bookingHistory {\n          bookingCount { count timeFrame }\n        }\n        showReviewSnippet\n        isPopular\n        roomInformation {\n          cheapestRoomSizeSqm\n          facilities { id propertyFacilityName symbol }\n        }\n      }\n    }\n    searchEnrichment { pageToken }\n  }\n}",
+                "variables": {
+                    "CitySearchRequest": {
+                        "cityId": "{{city_id}}",
+                        "searchRequest": {
+                            "searchCriteria": {
+                                "isAllowBookOnRequest": true,
+                                "bookingDate": "2026-03-13T01:53:11.000Z",
+                                "checkInDate": "{{check_in}}T00:00:00.000Z",
+                                "localCheckInDate": "{{check_in}}",
+                                "los": 3,
+                                "rooms": 1,
+                                "adults": 2,
+                                "children": 0,
+                                "childAges": [],
+                                "ratePlans": [],
+                                "featureFlagRequest": {
+                                    "fetchNamesForTealium": true,
+                                    "fiveStarDealOfTheDay": true,
+                                    "isAllowBookOnRequest": false,
+                                    "showUnAvailable": true,
+                                    "showRemainingProperties": true,
+                                    "isMultiHotelSearch": false,
+                                    "enableAgencySupplyForPackages": true,
+                                    "flags": [
+                                        {
+                                            "feature": "FamilyChildFriendlyPopularFilter",
+                                            "enable": true
+                                        },
+                                        {
+                                            "feature": "FamilyChildFriendlyPropertyTypeFilter",
+                                            "enable": true
+                                        },
+                                        {
+                                            "feature": "FamilyMode",
+                                            "enable": false
+                                        }
+                                    ],
+                                    "enablePageToken": true,
+                                    "enableDealsOfTheDayFilter": false,
+                                    "isEnableSupplierFinancialInfo": false,
+                                    "isFlexibleMultiRoomSearch": true,
+                                    "enableLuxuryHotelTSP": true
+                                },
+                                "isUserLoggedIn": false,
+                                "currency": "{{currency}}",
+                                "travellerType": "Couple",
+                                "isAPSPeek": false,
+                                "enableOpaqueChannel": false,
+                                "isEnabledPartnerChannelSelection": null,
+                                "sorting": {
+                                    "sortField": "Ranking",
+                                    "sortOrder": "Desc",
+                                    "sortParams": null
+                                },
+                                "requiredBasis": "PRPN",
+                                "requiredPrice": "Exclusive",
+                                "suggestionLimit": 0,
+                                "synchronous": false,
+                                "supplierPullMetadataRequest": null,
+                                "isRoomSuggestionRequested": false,
+                                "isAPORequest": false,
+                                "hasAPOFilter": false
+                            },
+                            "searchContext": {
+                                "userId": "f44cf67d-33d8-4ac4-a424-132b6d29105e",
+                                "memberId": 0,
+                                "locale": "en-us",
+                                "cid": 1922890,
+                                "origin": "BR",
+                                "platform": 1,
+                                "deviceTypeId": 1,
+                                "experiments": {
+                                    "forceByVariant": null,
+                                    "forceByExperiment": [
+                                        {
+                                            "id": "JGCW-204",
+                                            "variant": "B"
+                                        }
+                                    ]
+                                },
+                                "isRetry": false,
+                                "showCMS": false,
+                                "storeFrontId": 3,
+                                "pageTypeId": 103,
+                                "whiteLabelKey": null,
+                                "ipAddress": "0.0.0.0",
+                                "endpointSearchType": "CitySearch",
+                                "trackSteps": null,
+                                "searchId": "a4882ea2-574d-40e1-9be8-c7a6223827ca"
+                            },
+                            "matrix": null,
+                            "matrixGroup": [
+                                {
+                                    "matrixGroup": "AccommodationType",
+                                    "size": 100
+                                },
+                                {
+                                    "matrixGroup": "StarRatingWithLuxury",
+                                    "size": 20
+                                },
+                                {
+                                    "matrixGroup": "HotelFacilities",
+                                    "size": 100
+                                },
+                                {
+                                    "matrixGroup": "RoomAmenities",
+                                    "size": 100
+                                },
+                                {
+                                    "matrixGroup": "RoomBenefits",
+                                    "size": 100
+                                },
+                                {
+                                    "matrixGroup": "PaymentOptions",
+                                    "size": 100
+                                },
+                                {
+                                    "matrixGroup": "ReviewScore",
+                                    "size": 100
+                                },
+                                {
+                                    "matrixGroup": "HotelAreaId",
+                                    "size": 100
+                                },
+                                {
+                                    "matrixGroup": "ProductType",
+                                    "size": 100
+                                },
+                                {
+                                    "matrixGroup": "GroupedBedTypes",
+                                    "size": 100
+                                },
+                                {
+                                    "matrixGroup": "PopularForFamily",
+                                    "size": 5
+                                },
+                                {
+                                    "matrixGroup": "KidsStayForFree",
+                                    "size": 5
+                                }
+                            ],
+                            "filterRequest": {
+                                "idsFilters": [],
+                                "rangeFilters": [],
+                                "textFilters": []
+                            },
+                            "page": {
+                                "pageSize": 45,
+                                "pageNumber": 1,
+                                "pageToken": ""
+                            },
+                            "apoRequest": {
+                                "apoPageSize": 10
+                            },
+                            "searchHistory": [],
+                            "searchDetailRequest": {
+                                "priceHistogramBins": 50
+                            },
+                            "isTrimmedResponseRequested": false,
+                            "featuredAgodaHomesRequest": null,
+                            "featuredLuxuryHotelsRequest": null,
+                            "highlyRatedAgodaHomesRequest": {
+                                "numberOfAgodaHomes": 30,
+                                "minimumReviewScore": 7.5,
+                                "minimumReviewCount": 3,
+                                "accommodationTypes": [
+                                    28,
+                                    29,
+                                    30,
+                                    102,
+                                    103,
+                                    106,
+                                    107,
+                                    108,
+                                    109,
+                                    110,
+                                    114,
+                                    115,
+                                    120,
+                                    131
+                                ],
+                                "sortVersion": 0
+                            },
+                            "extraAgodaHomesRequest": null,
+                            "extraHotels": {
+                                "extraHotelIds": [],
+                                "enableFiltersForExtraHotels": false
+                            },
+                            "rankingRequest": {
+                                "isNhaKeywordSearch": false
+                            },
+                            "rocketmilesRequestV2": null,
+                            "featuredPulsePropertiesRequest": {
+                                "numberOfPulseProperties": 15
+                            }
+                        }
+                    },
+                    "ContentSummaryRequest": {
+                        "context": {
+                            "rawUserId": "f44cf67d-33d8-4ac4-a424-132b6d29105e",
+                            "memberId": 0,
+                            "userOrigin": "BR",
+                            "locale": "en-us",
+                            "forceExperimentsByIdNew": [
+                                {
+                                    "key": "JGCW-204",
+                                    "value": "B"
+                                }
+                            ],
+                            "apo": false,
+                            "searchCriteria": {
+                                "cityId": "{{city_id}}"
+                            },
+                            "platform": {
+                                "id": 1
+                            },
+                            "storeFrontId": 3,
+                            "cid": "1922890",
+                            "occupancy": {
+                                "numberOfAdults": 2,
+                                "numberOfChildren": 0,
+                                "travelerType": 2,
+                                "checkIn": "{{check_in}}T00:00:00.000Z"
+                            },
+                            "deviceTypeId": 1,
+                            "whiteLabelKey": "",
+                            "correlationId": ""
+                        },
+                        "summary": {
+                            "highlightedFeaturesOrderPriority": null,
+                            "includeHotelCharacter": true
+                        },
+                        "reviews": {
+                            "commentary": null,
+                            "demographics": {
+                                "providerIds": null,
+                                "filter": {
+                                    "defaultProviderOnly": true
+                                }
+                            },
+                            "summaries": {
+                                "providerIds": null,
+                                "apo": true,
+                                "limit": 1,
+                                "travellerType": 2
+                            },
+                            "cumulative": {
+                                "providerIds": null
+                            },
+                            "filters": null
+                        },
+                        "images": {
+                            "page": null,
+                            "maxWidth": 0,
+                            "maxHeight": 0,
+                            "imageSizes": null,
+                            "indexOffset": null
+                        },
+                        "rooms": {
+                            "images": null,
+                            "featureLimit": 0,
+                            "filterCriteria": null,
+                            "includeMissing": false,
+                            "includeSoldOut": false,
+                            "includeDmcRoomId": false,
+                            "soldOutRoomCriteria": null,
+                            "showRoomSize": true,
+                            "showRoomFacilities": true,
+                            "showRoomName": false
+                        },
+                        "nonHotelAccommodation": true,
+                        "engagement": true,
+                        "highlights": {
+                            "maxNumberOfItems": 0,
+                            "images": {
+                                "imageSizes": [
+                                    {
+                                        "key": "full",
+                                        "size": {
+                                            "width": 0,
+                                            "height": 0
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "personalizedInformation": true,
+                        "localInformation": {
+                            "images": null
+                        },
+                        "features": null,
+                        "rateCategories": true,
+                        "contentRateCategories": {
+                            "escapeRateCategories": {}
+                        },
+                        "synopsis": true
+                    },
+                    "PricingSummaryRequest": {
+                        "cheapestOnly": true,
+                        "context": {
+                            "isAllowBookOnRequest": true,
+                            "abTests": [
+                                {
+                                    "testId": 9021,
+                                    "abUser": "B"
+                                },
+                                {
+                                    "testId": 9023,
+                                    "abUser": "B"
+                                },
+                                {
+                                    "testId": 9024,
+                                    "abUser": "B"
+                                },
+                                {
+                                    "testId": 9025,
+                                    "abUser": "B"
+                                },
+                                {
+                                    "testId": 9027,
+                                    "abUser": "B"
+                                },
+                                {
+                                    "testId": 9029,
+                                    "abUser": "B"
+                                }
+                            ],
+                            "clientInfo": {
+                                "cid": 1922890,
+                                "languageId": 1,
+                                "languageUse": 1,
+                                "origin": "BR",
+                                "platform": 1,
+                                "searchId": "a4882ea2-574d-40e1-9be8-c7a6223827ca",
+                                "storefront": 3,
+                                "userId": "f44cf67d-33d8-4ac4-a424-132b6d29105e",
+                                "ipAddress": "0.0.0.0"
+                            },
+                            "experiment": [
+                                {
+                                    "name": "JGCW-204",
+                                    "variant": "B"
+                                }
+                            ],
+                            "sessionInfo": {
+                                "isLogin": false,
+                                "memberId": 0,
+                                "sessionId": 1
+                            }
+                        },
+                        "isSSR": true,
+                        "pricing": {
+                            "bookingDate": "2026-03-13T01:53:11.000Z",
+                            "checkIn": "{{check_in}}T00:00:00.000Z",
+                            "checkout": "{{check_out}}T00:00:00.000Z",
+                            "localCheckInDate": "{{check_in}}",
+                            "localCheckoutDate": "{{check_out}}",
+                            "currency": "{{currency}}",
+                            "details": {
+                                "cheapestPriceOnly": false,
+                                "itemBreakdown": false,
+                                "priceBreakdown": false
+                            },
+                            "featureFlag": [
+                                "ClientDiscount",
+                                "PriceHistory",
+                                "VipPlatinum",
+                                "RatePlanPromosCumulative",
+                                "PromosCumulative",
+                                "MixAndSave",
+                                "APSPeek",
+                                "StackChannelDiscount",
+                                "AutoApplyPromos",
+                                "EnableAgencySupplyForPackages",
+                                "EnableCashback",
+                                "CreditCardPromotionPeek",
+                                "EnableCofundedCashback",
+                                "DispatchGoLocalForInternational",
+                                "EnableGoToTravelCampaign",
+                                "EnableCashbackMildlyAggressiveDisplay",
+                                "EnablePriceTrend"
+                            ],
+                            "features": {
+                                "crossOutRate": false,
+                                "isAPSPeek": false,
+                                "isAllOcc": false,
+                                "isApsEnabled": false,
+                                "isIncludeUsdAndLocalCurrency": false,
+                                "isMSE": true,
+                                "isRPM2Included": true,
+                                "maxSuggestions": 0,
+                                "isEnableSupplierFinancialInfo": false,
+                                "isLoggingAuctionData": false,
+                                "newRateModel": false,
+                                "overrideOccupancy": false,
+                                "filterCheapestRoomEscapesPackage": false,
+                                "priusId": 0,
+                                "synchronous": false,
+                                "enableRichContentOffer": true,
+                                "showCouponAmountInUserCurrency": false,
+                                "disableEscapesPackage": false,
+                                "enablePushDayUseRates": false,
+                                "enableDayUseCor": false,
+                                "ignoreRoomsCountForNha": false,
+                                "enableSuggestPriceExclusiveWithFees": true
+                            },
+                            "filters": {
+                                "cheapestRoomFilters": [],
+                                "filterAPO": false,
+                                "ratePlans": [
+                                    1
+                                ],
+                                "secretDealOnly": false,
+                                "suppliers": [],
+                                "nosOfBedrooms": []
+                            },
+                            "includedPriceInfo": false,
+                            "occupancy": {
+                                "adults": 2,
+                                "children": 0,
+                                "childAges": [],
+                                "rooms": 1,
+                                "childrenTypes": []
+                            },
+                            "supplierPullMetadata": {
+                                "requiredPrecheckAccuracyLevel": 0
+                            },
+                            "mseHotelIds": [],
+                            "mseClicked": "",
+                            "ppLandingHotelIds": [],
+                            "searchedHotelIds": [],
+                            "paymentId": -1,
+                            "externalLoyaltyRequest": null
+                        },
+                        "suggestedPrice": "Exclusive"
+                    },
+                    "PriceStreamMetaLabRequest": {
+                        "attributesId": [
+                            8,
+                            1,
+                            18,
+                            7,
+                            11,
+                            2,
+                            3
+                        ]
+                    }
+                }
+            },
+            "key": "graphql_response"
+        },
+        {
+            "_comment": "Step 4: Extract hotels",
+            "action": "parse_json",
+            "source": "graphql_response",
+            "path": "data.citySearch.properties",
+            "key": "hotels",
+            "fields": {
+                "hotel_name": "content.informationSummary.displayName",
+                "star_rating": "content.informationSummary.rating",
+                "property_type": "content.informationSummary.propertyType",
+                "guest_rating": "content.reviews.cumulative.score",
+                "review_count": "content.reviews.cumulative.reviewCount",
+                "latitude": "content.informationSummary.geoInfo.latitude",
+                "longitude": "content.informationSummary.geoInfo.longitude",
+                "deep_link": "content.informationSummary.propertyLinks.propertyPage",
+                "is_available": "pricing.isAvailable"
+            },
+            "limit": 45
+        }
+    ]
+}

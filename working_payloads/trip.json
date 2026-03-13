@@ -1,0 +1,110 @@
+{
+    "_comment": "Trip.com — Hotel Search via REST API. Converted from providers/trip_com/scraper.py",
+    "url": "https://www.trip.com/restapi/soa2/34951/fetchHotelList",
+    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
+    "steps": [
+        {
+            "_comment": "Step 1: Create curl_cffi session with Chrome 124 TLS fingerprint",
+            "action": "http_session",
+            "impersonate": "chrome124",
+            "headers": {
+                "accept": "application/json",
+                "accept-language": "en-US,en;q=0.9",
+                "content-type": "application/json",
+                "cookieorigin": "https://www.trip.com",
+                "currency": "{{currency}}",
+                "locale": "en-XX",
+                "origin": "https://www.trip.com",
+                "referer": "https://www.trip.com/hotels/",
+                "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"124\", \"Chromium\";v=\"124\"",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "\"Windows\"",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                "x-ctx-currency": "{{currency}}",
+                "x-ctx-locale": "en-XX"
+            }
+        },
+        {
+            "_comment": "Step 2: POST fetchHotelList API (dates must be unhyphenated: 20260415)",
+            "action": "http_post",
+            "url": "https://www.trip.com/restapi/soa2/34951/fetchHotelList",
+            "json": {
+                "date": {
+                    "dateType": 1,
+                    "dateInfo": {
+                        "checkInDate": "{{check_in_compact}}",
+                        "checkOutDate": "{{check_out_compact}}"
+                    }
+                },
+                "destination": {
+                    "type": 1,
+                    "geo": {"cityId": "{{city_id}}", "countryId": 0},
+                    "keyword": {"word": "{{city}}"}
+                },
+                "extraFilter": {
+                    "childInfoItems": [],
+                    "ctripMainLandBDCoordinate": true,
+                    "sessionId": "",
+                    "extendableParams": {
+                        "tripWalkDriveSwitch": "T",
+                        "multiLangHotelNameVersion": "E"
+                    }
+                },
+                "filters": [
+                    {"type": "19", "title": "", "value": "{{city_id}}", "filterId": "19|{{city_id}}"},
+                    {"type": "80", "title": "Price per room per night", "value": "0", "filterId": "80|0|1"}
+                ],
+                "roomQuantity": "{{rooms}}",
+                "marketInfo": {
+                    "received": false,
+                    "isRechargeSuccessful": false,
+                    "authInfo": {"isLogin": false, "isMember": false}
+                },
+                "paging": {"pageIndex": 1, "pageSize": 20, "pageCode": "10320668148"},
+                "head": {
+                    "platform": "PC",
+                    "cver": "0",
+                    "cid": "1772176612345.5836RO2aIXaX",
+                    "bu": "IBU",
+                    "group": "trip",
+                    "aid": "742331",
+                    "sid": "1234567",
+                    "locale": "en-XX",
+                    "timezone": "5",
+                    "currency": "{{currency}}",
+                    "pageId": "10320668148",
+                    "vid": "1772176612345.5836RO2aIXaX",
+                    "isSSR": false,
+                    "extension": [
+                        {"name": "cityId", "value": "{{city_id}}"},
+                        {"name": "checkIn", "value": "{{check_in}}"},
+                        {"name": "checkOut", "value": "{{check_out}}"},
+                        {"name": "region", "value": "XX"}
+                    ]
+                }
+            },
+            "key": "api_response"
+        },
+        {
+            "_comment": "Step 3: Extract hotels from API response",
+            "action": "parse_json",
+            "source": "api_response",
+            "path": "data.hotelList",
+            "key": "hotels",
+            "fields": {
+                "hotel_name": "hotelInfo.nameInfo.enName",
+                "stars": "hotelInfo.hotelStar.star",
+                "guest_rating": "hotelInfo.commentInfo.commentScore",
+                "review_count": "hotelInfo.commentInfo.commenterNumber",
+                "latitude": "hotelInfo.positionInfo.mapCoordinate.0.latitude",
+                "longitude": "hotelInfo.positionInfo.mapCoordinate.0.longitude",
+                "city": "hotelInfo.positionInfo.cityNameEn",
+                "image_url": "hotelInfo.hotelImages.url"
+            },
+            "limit": 25
+        }
+    ]
+}

@@ -1,0 +1,119 @@
+{
+    "_comment": "Booking.com Hotel Search — ScraperFlow step payload. Replace values marked with ← CHANGE",
+    "url": "https://www.booking.com/dml/graphql",
+    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
+    "steps": [
+        {
+            "_comment": "Step 1: Create curl_cffi session with Chrome TLS fingerprint + proxy",
+            "action": "http_session",
+            "impersonate": "chrome120",
+            "headers": {
+                "accept": "*/*",
+                "accept-language": "en-US,en;q=0.9",
+                "content-type": "application/json",
+                "origin": "https://www.booking.com",
+                "referer": "https://www.booking.com/searchresults.html",
+                "sec-ch-ua": "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "\"Windows\"",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+        },
+        {
+            "_comment": "Step 2: Warm cookies — visit homepage",
+            "action": "http_get",
+            "url": "https://www.booking.com/",
+            "key": "_warmup_home",
+            "response_type": "text"
+        },
+        {
+            "_comment": "Step 3: Warm cookies — visit search page (sets session cookies)",
+            "action": "http_get",
+            "url": "https://www.booking.com/searchresults.html?ss=Dubai&checkin=2026-04-15&checkout=2026-04-18&group_adults=2&group_children=0&no_rooms=1&selected_currency=USD&dest_id=-782831&dest_type=city",
+            "key": "_warmup_search",
+            "response_type": "text"
+        },
+        {
+            "_comment": "Step 4: GraphQL query — page 1 (offset=0, 25 results)",
+            "action": "http_post",
+            "url": "https://www.booking.com/dml/graphql",
+            "headers": {
+                "accept": "*/*",
+                "accept-language": "en-US,en;q=0.9",
+                "apollographql-client-name": "b-search-web-searchresults",
+                "apollographql-client-version": "aYYKSObc",
+                "content-type": "application/json",
+                "origin": "https://www.booking.com",
+                "referer": "https://www.booking.com/searchresults.html",
+                "sec-ch-ua": "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "\"Windows\"",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
+            "json": {
+                "operationName": "FullSearch",
+                "variables": {
+                    "input": {
+                        "dates": {
+                            "checkin": "2026-04-15",
+                            "checkout": "2026-04-18"
+                        },
+                        "location": {
+                            "searchString": "Dubai",
+                            "destType": "CITY",
+                            "destId": -782831
+                        },
+                        "nbRooms": 1,
+                        "nbAdults": 2,
+                        "nbChildren": 0,
+                        "pagination": {
+                            "rowsPerPage": 25,
+                            "offset": 0
+                        },
+                        "travelPurpose": 2,
+                        "useSearchParamsFromSession": true
+                    }
+                },
+                "query": "query FullSearch($input: SearchQueryInput!) { searchQueries { search(input: $input) { ... on SearchQueryOutput { pagination { nbResultsPerPage nbResultsTotal } results { displayName { text } basicPropertyData { id pageName accommodationTypeId isClosed starRating { value symbol } reviews { totalScore showScore secondaryScore secondaryTextTag { translation } totalScoreTextTag { translation } reviewsCount } location { address city countryCode } photos { main { highResUrl { relativeUrl } } } } priceDisplayInfoIrene { displayPrice { amountPerStay { amountRounded amountUnformatted currency } } } blocks { freeCancellationUntil } } } } } }"
+            },
+            "key": "graphql_response"
+        },
+        {
+            "_comment": "Step 5: Extract & reshape hotel data from GraphQL response",
+            "action": "parse_json",
+            "source": "graphql_response",
+            "path": "data.searchQueries.search.results",
+            "key": "hotels",
+            "fields": {
+                "hotel_name": "displayName.text",
+                "hotel_id": "basicPropertyData.id",
+                "page_name": "basicPropertyData.pageName",
+                "star_rating": "basicPropertyData.starRating.value",
+                "guest_rating": "basicPropertyData.reviews.totalScore",
+                "review_text": "basicPropertyData.reviews.totalScoreTextTag.translation",
+                "review_count": "basicPropertyData.reviews.reviewsCount",
+                "address": "basicPropertyData.location.address",
+                "city": "basicPropertyData.location.city",
+                "country": "basicPropertyData.location.countryCode",
+                "price": "priceDisplayInfoIrene.displayPrice.amountPerStay.amountRounded",
+                "price_raw": "priceDisplayInfoIrene.displayPrice.amountPerStay.amountUnformatted",
+                "currency": "priceDisplayInfoIrene.displayPrice.amountPerStay.currency",
+                "image_url": "basicPropertyData.photos.main.highResUrl.relativeUrl",
+                "free_cancellation_until": "blocks.0.freeCancellationUntil"
+            }
+        },
+        {
+            "_comment": "Step 6: Also extract total result count",
+            "action": "parse_json",
+            "source": "graphql_response",
+            "path": "data.searchQueries.search.pagination",
+            "key": "pagination"
+        }
+    ]
+}

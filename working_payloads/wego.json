@@ -1,0 +1,126 @@
+{
+    "_comment": "Wego Hotels — search via wego.pk API. Requires cookie warming, POST to create search, wait, then poll results.",
+    "url": "https://www.wego.pk",
+    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
+    "steps": [
+        {
+            "action": "http_session",
+            "impersonate": "chrome120",
+            "headers": {
+                "accept": "*/*",
+                "accept-language": "en-US,en;q=0.9",
+                "cache-control": "no-cache",
+                "pragma": "no-cache",
+                "content-type": "application/json",
+                "dnt": "1",
+                "origin": "https://www.wego.pk",
+                "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\"",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "\"Windows\"",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+            }
+        },
+        {
+            "_comment": "Warm cookies",
+            "action": "http_get",
+            "url": "https://www.wego.pk/",
+            "headers": {"accept": "text/html,application/xhtml+xml,*/*;q=0.8", "upgrade-insecure-requests": "1"},
+            "key": "_warmup_home",
+            "response_type": "text"
+        },
+        {
+            "_comment": "Visit search page",
+            "action": "http_get",
+            "url": "https://www.wego.pk/hotels/searches/{{city_code_lower}}/{{check_in}}/{{check_out}}?guests={{adults}}&locale=en&currencyCode={{currency}}",
+            "headers": {"accept": "text/html,application/xhtml+xml,*/*;q=0.8", "referer": "https://www.wego.pk/"},
+            "key": "_warmup_search",
+            "response_type": "text"
+        },
+        {
+            "_comment": "POST create search",
+            "action": "http_post",
+            "url": "https://www.wego.pk/kong/v3/metasearch/hotels/searches?locale=en&currencyCode={{currency}}",
+            "headers": {"referer": "https://www.wego.pk/hotels/searches/{{city_code_lower}}/{{check_in}}/{{check_out}}"},
+            "json": {
+                "search": {
+                    "cityCode": "{{city_code}}",
+                    "roomsCount": "{{rooms}}",
+                    "guestsCount": "{{adults}}",
+                    "adultsCount": "{{adults}}",
+                    "childrenCount": 0,
+                    "rooms": [{"adultsCount": "{{adults}}", "childrenCount": 0}],
+                    "checkIn": "{{check_in}}",
+                    "checkOut": "{{check_out}}",
+                    "locale": "en",
+                    "currencyCode": "{{currency}}",
+                    "siteCode": "PK",
+                    "deviceType": "DESKTOP",
+                    "appType": "WEB_APP",
+                    "userLoggedIn": false
+                }
+            },
+            "key": "search_response"
+        },
+        {
+            "action": "parse_json",
+            "source": "search_response",
+            "path": "search.id",
+            "key": "search_id"
+        },
+        {
+            "_comment": "Wait 3s for search to process",
+            "action": "wait",
+            "duration": 3000
+        },
+        {
+            "_comment": "Poll 1 — initial results",
+            "action": "http_get",
+            "url": "https://www.wego.pk/kong/v3/metasearch/hotels/searches/{{search_id}}/results?locale=en&currencyCode={{currency}}&amountType=NIGHTLY&offset=0&isLastPolling=false&moreRates=true",
+            "headers": {"referer": "https://www.wego.pk/hotels/searches/{{city_code_lower}}/{{check_in}}/{{check_out}}?guests={{adults}}&sort=popularity&order=desc"},
+            "key": "_poll1"
+        },
+        {
+            "_comment": "Wait 3s more",
+            "action": "wait",
+            "duration": 3000
+        },
+        {
+            "_comment": "Poll 2 — more results",
+            "action": "http_get",
+            "url": "https://www.wego.pk/kong/v3/metasearch/hotels/searches/{{search_id}}/results?locale=en&currencyCode={{currency}}&amountType=NIGHTLY&offset=0&isLastPolling=false&moreRates=true",
+            "headers": {"referer": "https://www.wego.pk/hotels/searches/{{city_code_lower}}/{{check_in}}/{{check_out}}?guests={{adults}}&sort=popularity&order=desc"},
+            "key": "_poll2"
+        },
+        {
+            "_comment": "Wait 3s more",
+            "action": "wait",
+            "duration": 3000
+        },
+        {
+            "_comment": "Poll 3 — final results",
+            "action": "http_get",
+            "url": "https://www.wego.pk/kong/v3/metasearch/hotels/searches/{{search_id}}/results?locale=en&currencyCode={{currency}}&amountType=NIGHTLY&offset=0&isLastPolling=true&moreRates=true",
+            "headers": {"referer": "https://www.wego.pk/hotels/searches/{{city_code_lower}}/{{check_in}}/{{check_out}}?guests={{adults}}&sort=popularity&order=desc"},
+            "key": "results_response"
+        },
+        {
+            "action": "parse_json",
+            "source": "results_response",
+            "path": "hotels",
+            "key": "hotels",
+            "fields": {
+                "hotel_name": "name",
+                "star_rating": "star",
+                "guest_rating": "score",
+                "review_count": "reviewCount",
+                "latitude": "latitude",
+                "longitude": "longitude",
+                "image_url": "image"
+            },
+            "limit": 50
+        }
+    ]
+}

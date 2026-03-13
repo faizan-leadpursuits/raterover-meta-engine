@@ -1,0 +1,65 @@
+{
+    "_comment": "Cleartrip Hotels — SSR extraction. Uses autocomplete to resolve city slugs then browser to extract data.",
+    "url": "https://www.cleartrip.com",
+    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
+    "steps": [
+        {
+            "_comment": "Step 1: Resolve city slug via autocomplete API",
+            "action": "http_post",
+            "url": "https://www.cleartrip.com/prefixy/ui/autoSuggest/getSuggestions",
+            "headers": {
+                "channel": "desktop",
+                "content-type": "application/json",
+                "x-client-id": "cleartrip"
+            },
+            "json": {
+                "prefix": "{{city}}",
+                "useCaseContext": "HOTEL_HOME_PAGE"
+            },
+            "key": "city_data"
+        },
+        {
+            "_comment": "Step 2: Extract country and city names",
+            "action": "parse_json",
+            "source": "city_data",
+            "path": "suggestions.0",
+            "key": "top_suggestion",
+            "fields": {
+                "raw_city": "cityName",
+                "raw_country": "countryName"
+            }
+        },
+        {
+            "action": "transform",
+            "source": "raw_city",
+            "key": "city_slug",
+            "operation": "slugify"
+        },
+        {
+            "action": "transform",
+            "source": "raw_country",
+            "key": "country_slug",
+            "operation": "slugify"
+        },
+        {
+            "action": "goto",
+            "url": "https://www.cleartrip.com/hotels/{{country_slug}}/{{city_slug}}/?checkIn={{check_in}}&checkOut={{check_out}}&adults1={{adults}}&numRooms={{rooms}}&curr={{currency}}"
+        },
+        {
+            "action": "wait_for",
+            "selector": "[data-testid='hotel-card']",
+            "timeout": 15000
+        },
+        {
+            "action": "extract_list",
+            "selector": "[data-testid='hotel-card']",
+            "key": "hotels",
+            "fields": {
+                "hotel_name": "[data-testid='hotel-name']",
+                "price": "[data-testid='hotel-price']",
+                "rating": "[data-testid='hotel-rating']",
+                "locality": "[data-testid='hotel-locality']"
+            }
+        }
+    ]
+}

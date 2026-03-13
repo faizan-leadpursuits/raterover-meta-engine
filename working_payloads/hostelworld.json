@@ -1,0 +1,28 @@
+{
+    "_comment": "Hostelworld — Direct SSR extraction. Robust selection from property cards.",
+    "url": "https://www.hostelworld.com",
+    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
+    "steps": [
+        {
+            "action": "goto",
+            "url": "https://www.hostelworld.com/st/hostels/{{city}}/?DateRange={{check_in}},{{check_out}}&NumberOfGuests={{adults}}"
+        },
+        {
+            "action": "wait_for",
+            "selector": "[data-testid='property-card']",
+            "timeout": 20000
+        },
+        {
+            "action": "extract_list",
+            "selector": "[data-testid='property-card']",
+            "key": "hotels",
+            "fields": {
+                "name": "[data-testid='property-name']",
+                "price": "[data-testid='price-label']",
+                "rating": "[data-testid='rating-score']",
+                "review_count": "[data-testid='rating-count']",
+                "distance": "[data-testid='distance-from-city-center']"
+            }
+        }
+    ]
+}

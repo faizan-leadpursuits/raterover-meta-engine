@@ -1,0 +1,118 @@
+{
+  "search": {
+    "id": "357534d40321f9df",
+    "searchType": "CITY",
+    "city": {
+      "code": "DXB",
+      "name": "Dubai"
+    },
+    "worldRegion": {
+      "code": "m",
+      "name": "Middle East"
+    },
+    "country": {
+      "code": "AE",
+      "name": "United Arab Emirates"
+    },
+    "user": {},
+    "roomsCount": 1,
+    "guestsCount": 2,
+    "checkIn": "2026-06-01",
+    "checkOut": "2026-06-05",
+    "createdAt": "2026-03-12T13:27:36.875+08:00",
+    "locale": "en",
+    "siteCode": "PK",
+    "currencyCode": "USD",
+    "deviceType": "DESKTOP",
+    "appType": "WEB_APP",
+    "userCountryCode": "US",
+    "key": "DXB~CITY~2026-06-01~2026-06-05~1~2~PK~en~DESKTOP~WEB_APP",
+    "cityCode": "DXB",
+    "cityName": "Dubai",
+    "countryCode": "AE",
+    "countryName": "United Arab Emirates",
+    "crossSell": false,
+    "scoreTesting": {
+      "variant": "BASELINE"
+    },
+    "bowOnlyTesting": {
+      "variant": "BASELINE"
+    },
+    "removePartnerRateTesting": {
+      "variant": "BASELINE"
+    },
+    "rooms": [
+      {
+        "adultsCount": 2,
+        "childrenCount": 0,
+        "childrenAges": [],
+        "guestsCount": 2
+      }
+    ]
+  },
+  "rates": [],
+  "sponsoredAdRates": [],
+  "rooms": {},
+  "hotels": [],
+  "filter": {},
+  "providerRatesCounts": [],
+  "scores": {},
+  "propertyTypes": [],
+  "stars": [
+    {
+      "id": 1,
+      "name": "1"
+    },
+    {
+      "id": 2,
+      "name": "2"
+    },
+    {
+      "id": 3,
+      "name": "3"
+    },
+    {
+      "id": 4,
+      "name": "4"
+    },
+    {
+      "id": 5,
+      "name": "5"
+    }
+  ],
+  "brands": [],
+  "chains": [],
+  "cities": [
+    {
+      "code": "DXB",
+      "name": "Dubai"
+    }
+  ],
+  "districts": [],
+  "amenities": [],
+  "tags": [],
+  "roomAmenities": [],
+  "themes": [],
+  "rateAmenities": [],
+  "roomTypeCategories": [],
+  "providers": [],
+  "groupSearch": false,
+  "landmarks": [],
+  "priceDisplaying": {
+    "totalTax": "EXCLUDED",
+    "price": "PER_NIGHT"
+  },
+  "socialProofs": [
+    {
+      "mostClickedHotelId": 1657130
+    }
+  ],
+  "advisory": {
+    "type": "warning",
+    "message": "Advisory for travelers: In affected regions, hotel availability may be limited due to ongoing disruptions and extended stays. When booking, we strongly recommend choosing flexible options and reviewing cancellation and refund policies carefully. Planning ahead can help ensure a smoother stay during this time.",
+    "backgroundColor": "#fff0e0",
+    "textColor": "#000000"
+  },
+  "count": 0,
+  "done": false
+}
