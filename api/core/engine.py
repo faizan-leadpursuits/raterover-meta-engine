@@ -26,6 +26,7 @@ AWS_REGION = os.getenv("AWS_DEFAULT_REGION", "us-east-1")
 PROVIDER_TIMEOUT = int(os.getenv("PROVIDER_TIMEOUT", "60"))
 SEARCH_TIMEOUT = int(os.getenv("SEARCH_TIMEOUT", "90"))
 MAX_CONCURRENT = int(os.getenv("MAX_CONCURRENT", "10"))
+PROXY_URL = os.getenv("PROXY_URL", "")
 
 _lambda_client = None
 
@@ -130,6 +131,7 @@ def invoke_provider(
 
         # Prepare variables
         vars = {
+            "proxy": PROXY_URL,
             "city": city,
             "check_in": check_in,
             "check_out": check_out,
@@ -150,6 +152,14 @@ def invoke_provider(
         # Run template engine
         concrete_payload = fill_template(template, vars)
         concrete_payload = fix_numeric_types(concrete_payload)
+
+        # Remove proxy if empty
+        if "proxy" in concrete_payload and (not concrete_payload.get("proxy") or concrete_payload.get("proxy") == "{{proxy}}"):
+            del concrete_payload["proxy"]
+
+        # Remove proxy if empty
+        if "proxy" in concrete_payload and (not concrete_payload.get("proxy") or concrete_payload.get("proxy") == "{{proxy}}"):
+            del concrete_payload["proxy"]
 
         # Invoke Lambda
         client = get_lambda_client()
