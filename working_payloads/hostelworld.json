@@ -23,5 +23,6 @@
                 "distance": "[data-testid='distance-from-city-center']"
             }
         }
-    ]
+    ],
+    "proxy": "{{proxy}}"
 }

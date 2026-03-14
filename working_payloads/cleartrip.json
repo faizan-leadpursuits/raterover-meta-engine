@@ -60,5 +60,6 @@
                 "locality": "[data-testid='hotel-locality']"
             }
         }
-    ]
+    ],
+    "proxy": "{{proxy}}"
 }

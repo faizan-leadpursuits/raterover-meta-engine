@@ -114,5 +114,6 @@
             "path": "data.searchQueries.search.pagination",
             "key": "pagination"
         }
-    ]
+    ],
+    "proxy": "{{proxy}}"
 }
