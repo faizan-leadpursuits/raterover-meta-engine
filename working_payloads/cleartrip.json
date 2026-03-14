@@ -1,7 +1,6 @@
 {
-    "_comment": "Cleartrip Hotels — SSR extraction. Uses autocomplete to resolve city slugs then browser to extract data.",
+    "_comment": "Cleartrip Hotels \u2014 SSR extraction. Uses autocomplete to resolve city slugs then browser to extract data.",
     "url": "https://www.cleartrip.com",
-    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
     "steps": [
         {
             "_comment": "Step 1: Resolve city slug via autocomplete API",

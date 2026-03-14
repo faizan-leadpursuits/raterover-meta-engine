@@ -1,7 +1,6 @@
 {
-    "_comment": "Trip.com — Hotel Search via REST API. Converted from providers/trip_com/scraper.py",
+    "_comment": "Trip.com \u2014 Hotel Search via REST API. Converted from providers/trip_com/scraper.py",
     "url": "https://www.trip.com/restapi/soa2/34951/fetchHotelList",
-    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
     "steps": [
         {
             "_comment": "Step 1: Create curl_cffi session with Chrome 124 TLS fingerprint",
@@ -41,8 +40,13 @@
                 },
                 "destination": {
                     "type": 1,
-                    "geo": {"cityId": "{{city_id}}", "countryId": 0},
-                    "keyword": {"word": "{{city}}"}
+                    "geo": {
+                        "cityId": "{{city_id}}",
+                        "countryId": 0
+                    },
+                    "keyword": {
+                        "word": "{{city}}"
+                    }
                 },
                 "extraFilter": {
                     "childInfoItems": [],
@@ -54,16 +58,33 @@
                     }
                 },
                 "filters": [
-                    {"type": "19", "title": "", "value": "{{city_id}}", "filterId": "19|{{city_id}}"},
-                    {"type": "80", "title": "Price per room per night", "value": "0", "filterId": "80|0|1"}
+                    {
+                        "type": "19",
+                        "title": "",
+                        "value": "{{city_id}}",
+                        "filterId": "19|{{city_id}}"
+                    },
+                    {
+                        "type": "80",
+                        "title": "Price per room per night",
+                        "value": "0",
+                        "filterId": "80|0|1"
+                    }
                 ],
                 "roomQuantity": "{{rooms}}",
                 "marketInfo": {
                     "received": false,
                     "isRechargeSuccessful": false,
-                    "authInfo": {"isLogin": false, "isMember": false}
+                    "authInfo": {
+                        "isLogin": false,
+                        "isMember": false
+                    }
                 },
-                "paging": {"pageIndex": 1, "pageSize": 20, "pageCode": "10320668148"},
+                "paging": {
+                    "pageIndex": 1,
+                    "pageSize": 20,
+                    "pageCode": "10320668148"
+                },
                 "head": {
                     "platform": "PC",
                     "cver": "0",
@@ -79,10 +100,22 @@
                     "vid": "1772176612345.5836RO2aIXaX",
                     "isSSR": false,
                     "extension": [
-                        {"name": "cityId", "value": "{{city_id}}"},
-                        {"name": "checkIn", "value": "{{check_in}}"},
-                        {"name": "checkOut", "value": "{{check_out}}"},
-                        {"name": "region", "value": "XX"}
+                        {
+                            "name": "cityId",
+                            "value": "{{city_id}}"
+                        },
+                        {
+                            "name": "checkIn",
+                            "value": "{{check_in}}"
+                        },
+                        {
+                            "name": "checkOut",
+                            "value": "{{check_out}}"
+                        },
+                        {
+                            "name": "region",
+                            "value": "XX"
+                        }
                     ]
                 }
             },

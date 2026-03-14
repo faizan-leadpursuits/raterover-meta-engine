@@ -1,7 +1,6 @@
 {
-    "_comment": "Booking.com Hotel Search — ScraperFlow step payload. Replace values marked with ← CHANGE",
+    "_comment": "Booking.com Hotel Search \u2014 ScraperFlow step payload. Replace values marked with \u2190 CHANGE",
     "url": "https://www.booking.com/dml/graphql",
-    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
     "steps": [
         {
             "_comment": "Step 1: Create curl_cffi session with Chrome TLS fingerprint + proxy",
@@ -23,21 +22,21 @@
             }
         },
         {
-            "_comment": "Step 2: Warm cookies — visit homepage",
+            "_comment": "Step 2: Warm cookies \u2014 visit homepage",
             "action": "http_get",
             "url": "https://www.booking.com/",
             "key": "_warmup_home",
             "response_type": "text"
         },
         {
-            "_comment": "Step 3: Warm cookies — visit search page (sets session cookies)",
+            "_comment": "Step 3: Warm cookies \u2014 visit search page (sets session cookies)",
             "action": "http_get",
             "url": "https://www.booking.com/searchresults.html?ss=Dubai&checkin=2026-04-15&checkout=2026-04-18&group_adults=2&group_children=0&no_rooms=1&selected_currency=USD&dest_id=-782831&dest_type=city",
             "key": "_warmup_search",
             "response_type": "text"
         },
         {
-            "_comment": "Step 4: GraphQL query — page 1 (offset=0, 25 results)",
+            "_comment": "Step 4: GraphQL query \u2014 page 1 (offset=0, 25 results)",
             "action": "http_post",
             "url": "https://www.booking.com/dml/graphql",
             "headers": {

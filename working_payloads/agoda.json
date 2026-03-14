@@ -1,7 +1,6 @@
 {
     "_comment": "Agoda \u2014 Hotel Search via GraphQL. Auto-generated from providers/agoda/scraper.py with exact schema match.",
     "url": "https://www.agoda.com/graphql/search",
-    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
     "steps": [
         {
             "_comment": "Step 1: Create curl_cffi session with Chrome 124 TLS",

@@ -1,7 +1,6 @@
 {
-    "_comment": "Traveloka — Browser-based extraction. ID 0 works for name-based search with redirect.",
+    "_comment": "Traveloka \u2014 Browser-based extraction. ID 0 works for name-based search with redirect.",
     "url": "https://www.traveloka.com",
-    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
     "steps": [
         {
             "action": "goto",

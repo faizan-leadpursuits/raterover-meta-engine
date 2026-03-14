@@ -1,7 +1,6 @@
 {
-    "_comment": "Priceline Hotels — GraphQL search via curl_cffi. Requires cookie harvesting (homepage -> listings) then POST GraphQL.",
+    "_comment": "Priceline Hotels \u2014 GraphQL search via curl_cffi. Requires cookie harvesting (homepage -> listings) then POST GraphQL.",
     "url": "https://www.priceline.com",
-    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
     "steps": [
         {
             "_comment": "Step 1: Create curl_cffi session with Chrome 131 TLS fingerprint",
@@ -54,7 +53,10 @@
                 "variables": {
                     "appCode": "DESKTOP",
                     "cguid": "44b12356e50a46dc929c3a8c9d1dc5ff",
-                    "context": {"cguid": "44b12356e50a46dc929c3a8c9d1dc5ff", "appCode": "DESKTOP"},
+                    "context": {
+                        "cguid": "44b12356e50a46dc929c3a8c9d1dc5ff",
+                        "appCode": "DESKTOP"
+                    },
                     "isWhiteLabel": false,
                     "filters": [],
                     "filterOptions": {
@@ -67,16 +69,33 @@
                     "requestDetails": {
                         "checkIn": "{{check_in_compact}}",
                         "checkOut": "{{check_out_compact}}",
-                        "countryData": {"countryCode": "US", "locale": "en-us", "currencyCode": "{{currency}}"},
+                        "countryData": {
+                            "countryCode": "US",
+                            "locale": "en-us",
+                            "currencyCode": "{{currency}}"
+                        },
                         "roomCount": "{{rooms}}",
-                        "occupancy": {"adults": "{{adults}}", "children": []},
-                        "referral": {"clickId": "", "sourceId": "PL", "refId": "PLDIRECT"},
+                        "occupancy": {
+                            "adults": "{{adults}}",
+                            "children": []
+                        },
+                        "referral": {
+                            "clickId": "",
+                            "sourceId": "PL",
+                            "refId": "PLDIRECT"
+                        },
                         "preferredHotelIds": []
                     },
-                    "pagination": {"offset": 0, "pageSize": 30},
+                    "pagination": {
+                        "offset": 0,
+                        "pageSize": 30
+                    },
                     "selectedAmenities": [],
                     "firstName": "",
-                    "locationSearch": {"searchType": "DEFAULT", "searchString": "{{city}}"}
+                    "locationSearch": {
+                        "searchType": "DEFAULT",
+                        "searchString": "{{city}}"
+                    }
                 },
                 "query": "fragment filters on HotelListingSearchSummary { filters(filterOptions: $filterOptions) { filterType flexibleFilter options { count description label placeholder value __typename } title subTitle __typename } appliedFilterSummary { label value filterType __typename } dynamicFilters { filterType value label isSelected count __typename } __typename } fragment sort on HotelListingSearchSummary { sort { options { isSelected label value __typename } title __typename } __typename } fragment location on HotelListingSearchSummary { location { id city stateCode countryCode countryName name googleMapsStaticImageUrl centerGeoCoordinate { latitude longitude __typename } area { id __typename } __typename } __typename } fragment pagination on HotelListingSearchSummary { pagination { offset pageSize searchLabel totalAvailableHotels __typename } __typename } query getStandaloneHotelListings( $appCode: String!, $cguid: ID!, $context: RequestContext, $filters: [HotelListingsSearchFilterInput!], $locationSearch: HotelListingsLocationSearchInput!, $pageType: String!, $isWhiteLabel: Boolean, $pagination: HotelListingsPaginationInput, $requestDetails: HotelListingInput!, $sort: HotelListingSortType, $filterOptions: HotelListingsSearchFilterOptions, $selectedAmenities: [String!], $firstName: String, $listingType: ListingType ) { standaloneHotelListings( context: $context filters: $filters locationSearch: $locationSearch pagination: $pagination requestDetails: $requestDetails sort: $sort listingType: $listingType ) { listings { ... on RtlHotelListing { hotelInfo { id amenities(filter: LIST) { name code __typename } brand { name ownerName brandId __typename } geoCoordinate { latitude longitude __typename } images(imageLimit: 5, imageFilterParams: {amenities: $selectedAmenities}) { fastlyUrl source alt __typename } isFavorite(cguid: $cguid) location { id city stateCode countryCode name timeZone __typename } name neighborhood { name __typename } propertyInfo { hotelThemes __typename } starLevelText traitBadges(appCode: $appCode, pageType: $pageType, isWhiteLabel: $isWhiteLabel) { code label category __typename } reviewInfo { reviewSummary { scores { label score __typename } total { label __typename } __typename } __typename } __typename } distanceFromLocation { label __typename } sponsoredInfo { clickTrackingUrl impressionTrackingUrl label __typename } minRateSummary { pclnId cancellationPolicy { label __typename } merchandisingOptions(clientDisplayCopy: {firstName: $firstName}) { description label subType type __typename } paymentDisclaimer upsellDisclaimer(clientDisplayCopy: {firstName: $firstName}) rtlRateBookingDetails { gid programName __typename } minPrice: price { amount ctaText currencyCode currencyPrefix description formattedAmount formattedDisplayAmount priceDisplayRegulation savings savingsPercentage strikePrice __typename } grandTotalExcludingTax: price(priceType: GRAND_TOTAL_EXCLUDING_TAX) { amount currencyCode currencyPrefix description formattedAmount formattedDisplayAmount strikePrice savings savingsPercentage __typename } nightlyAllRoomsPriceExcludingTax: price(priceType: NIGHTLY_ALL_ROOMS_PRICE_EXCLUDING_TAX) { amount currencyCode currencyPrefix description formattedDisplayAmount strikePrice savings savingsPercentage __typename } preAndPostPaidTaxes: price(priceType: TOTAL_PRE_AND_POST_PAID_TAXES_PER_STAY) { description amount currencyPrefix formattedAmount __typename } grandTotal: price(priceType: TOTAL) { currencyPrefix amount description formattedAmount formattedDisplayAmount savings strikePrice __typename } urgencyMessaging __typename } __typename } ... on SopqHotelListing { hotelInfo { id name productDescription { label description __typename } images { alt source fastlyUrl __typename } amenities(filter: LIST) { category { id text __typename } code name __typename } location { id name city stateCode countryCode timeZone __typename } neighborhood { id name description __typename } guaranteedBrands { brands { logo { alt source __typename } __typename } __typename } starLevelText reviewInfo { reviewSummary { scores { label score __typename } total { label __typename } __typename } __typename } __typename } minRateSummary { pclnId merchandisingOptions { description label subType type __typename } minPrice: price { amount currencyCode currencyPrefix description formattedAmount formattedDisplayAmount priceDisplayRegulation savings ctaText savingsPercentage strikePrice __typename } grandTotalExcludingTax: price(priceType: GRAND_TOTAL_EXCLUDING_TAX) { amount currencyCode currencyPrefix description formattedAmount formattedDisplayAmount strikePrice savings savingsPercentage __typename } nightlyAllRoomsPriceExcludingTax: price(priceType: NIGHTLY_ALL_ROOMS_PRICE_EXCLUDING_TAX) { amount currencyCode currencyPrefix description formattedDisplayAmount strikePrice savings savingsPercentage __typename } preAndPostPaidTaxes: price(priceType: TOTAL_PRE_AND_POST_PAID_TAXES_PER_STAY) { description amount currencyPrefix formattedAmount __typename } grandTotal: price(priceType: TOTAL) { amount currencyCode currencyPrefix description formattedAmount formattedDisplayAmount savings strikePrice __typename } upsellDisclaimer __typename } productType __typename } __typename } searchSummary { ...filters ...sort ...location ...pagination __typename } __typename } }"
             },

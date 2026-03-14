@@ -1,7 +1,6 @@
 {
-    "_comment": "Hostelworld — Direct SSR extraction. Robust selection from property cards.",
+    "_comment": "Hostelworld \u2014 Direct SSR extraction. Robust selection from property cards.",
     "url": "https://www.hostelworld.com",
-    "proxy": "http://31fbbc246b2c66370760:72cf4e8ccb06847d@gw.dataimpulse.com:823",
     "steps": [
         {
             "action": "goto",
